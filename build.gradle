@@ -1,0 +1,26 @@
+allprojects {
+    // zentraler Artifact-/Group-Standard
+    group = findProperty('maven_group') ?: findProperty('group')
+    version = findProperty('mod_version') ?: findProperty('version')
+
+    repositories {
+        mavenCentral()
+        maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+        maven { url = 'https://maven.fabricmc.net/' }
+    }
+}
+
+subprojects {
+    plugins.withId('java') {
+        java {
+            toolchain {
+                languageVersion = JavaLanguageVersion.of((findProperty('javaVersion') ?: '21') as int)
+            }
+            withSourcesJar()
+        }
+
+        tasks.withType(Test).configureEach {
+            useJUnitPlatform()
+        }
+    }
+}

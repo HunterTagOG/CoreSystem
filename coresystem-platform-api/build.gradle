@@ -1,0 +1,19 @@
+plugins {
+    id 'java-library'
+    id "maven-publish"
+}
+
+group = "dev.huntertagog"
+version = "1.0.0"
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of((project.javaVersion ?: 21) as int)
+    }
+    withSourcesJar()
+}
+
+dependencies {
+    // bewusst minimal: nur Interfaces/Ports
+    api "org.slf4j:slf4j-api:${slf4j_version}"
+}

@@ -1,0 +1,57 @@
+plugins {
+    id 'java-library'
+    id "maven-publish"
+}
+
+group = "dev.huntertagog"
+version = "1.0.0"
+
+base {
+    archivesName = "${project.archives_base_name}-common"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of((project.javaVersion ?: 21) as int)
+    }
+    withSourcesJar()
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Port-Interfaces (Scheduler/Logger/Permissions etc.) – falls du das Modul nutzt:
+    api project(':coresystem-platform-api')
+
+    // Logging API (Implementierung kommt auf der Plattform)
+    api "org.slf4j:slf4j-api:${project.slf4j_version}"
+
+    // Serialisierung / Utilities
+    implementation "com.google.code.gson:gson:${project.gson_version}"
+    implementation "com.google.guava:guava:${project.guava_version}"
+
+    // Redis + Pooling
+    implementation "redis.clients:jedis:${project.jedis_version}"
+    implementation "org.apache.commons:commons-pool2:${project.commons_pool2_version}"
+
+    // Optional: Redis Auth Extension (bei dir vorhanden)
+    implementation "redis.clients.authentication:redis-authx-core:${project.redis_authx_version}"
+
+    // Performance / Scanning / Bytecode
+    implementation "com.github.ben-manes.caffeine:caffeine:${project.caffeine_version}"
+    implementation "org.reflections:reflections:${project.reflections_version}"
+    implementation "org.javassist:javassist:${project.javassist_version}"
+
+    compileOnly files("libs/sophisticatedbackpacks-1.21.1-3.23.4.3.106.jar")
+    compileOnly files("libs/sophisticatedcore-1.21.1-1.2.9.20.164.jar")
+
+    // Tests
+    testImplementation platform("org.junit:junit-bom:5.11.3")
+    testImplementation "org.junit.jupiter:junit-jupiter"
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+}

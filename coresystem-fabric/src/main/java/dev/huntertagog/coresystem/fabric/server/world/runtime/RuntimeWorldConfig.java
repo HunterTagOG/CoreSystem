@@ -1,0 +1,152 @@
+package dev.huntertagog.coresystem.fabric.server.world.runtime;
+
+import dev.huntertagog.coresystem.fabric.server.world.GameRuleStore;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.GameRules;
+import net.minecraft.world.dimension.DimensionOptions;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.dimension.DimensionTypes;
+import net.minecraft.world.gen.chunk.ChunkGenerator;
+import org.jetbrains.annotations.Nullable;
+
+public final class RuntimeWorldConfig {
+    private long seed = 0;
+    private RegistryKey<DimensionType> dimensionType = DimensionTypes.OVERWORLD;
+    private ChunkGenerator generator = null;
+    private long timeOfDay = 6000;
+    private Difficulty difficulty = Difficulty.NORMAL;
+    private final GameRuleStore gameRules = new GameRuleStore();
+
+    private int sunnyTime = Integer.MAX_VALUE;
+    private boolean raining;
+    private int rainTime;
+    private boolean thundering;
+    private int thunderTime;
+
+    public RuntimeWorldConfig setSeed(long seed) {
+        this.seed = seed;
+        return this;
+    }
+
+    public RuntimeWorldConfig setDimensionType(RegistryKey<DimensionType> dimensionType) {
+        this.dimensionType = dimensionType;
+        return this;
+    }
+
+    public RuntimeWorldConfig setGenerator(ChunkGenerator generator) {
+        this.generator = generator;
+        return this;
+    }
+
+    public RuntimeWorldConfig setTimeOfDay(long timeOfDay) {
+        this.timeOfDay = timeOfDay;
+        return this;
+    }
+
+    public RuntimeWorldConfig setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+        return this;
+    }
+
+    public RuntimeWorldConfig setGameRule(GameRules.Key<GameRules.BooleanRule> key, boolean value) {
+        this.gameRules.set(key, value);
+        return this;
+    }
+
+    public RuntimeWorldConfig setGameRule(GameRules.Key<GameRules.IntRule> key, int value) {
+        this.gameRules.set(key, value);
+        return this;
+    }
+
+    public RuntimeWorldConfig setSunny(int sunnyTime) {
+        this.sunnyTime = sunnyTime;
+        this.raining = false;
+        this.thundering = false;
+        return this;
+    }
+
+    public RuntimeWorldConfig setRaining(int rainTime) {
+        this.raining = rainTime > 0;
+        this.rainTime = rainTime;
+        return this;
+    }
+
+    public RuntimeWorldConfig setRaining(boolean raining) {
+        this.raining = raining;
+        return this;
+    }
+
+    public RuntimeWorldConfig setThundering(int thunderTime) {
+        this.thundering = thunderTime > 0;
+        this.thunderTime = thunderTime;
+        return this;
+    }
+
+    public RuntimeWorldConfig setThundering(boolean thundering) {
+        this.thundering = thundering;
+        return this;
+    }
+
+    public long getSeed() {
+        return this.seed;
+    }
+
+    public RegistryKey<DimensionType> getDimensionType() {
+        return this.dimensionType;
+    }
+
+    public RegistryEntry<DimensionType> getDimensionType(MinecraftServer server) {
+        Registry<DimensionType> dimRegistry = server.getRegistryManager()
+                .get(RegistryKeys.DIMENSION_TYPE);
+
+        return dimRegistry.entryOf(this.dimensionType);
+    }
+
+    public DimensionOptions buildDimensionOptions(MinecraftServer server, ChunkGenerator generator) {
+        RegistryEntry<DimensionType> dimTypeEntry = getDimensionType(server);
+        return new DimensionOptions(dimTypeEntry, generator);
+    }
+
+    @Nullable
+    public ChunkGenerator getGenerator() {
+        return this.generator;
+    }
+
+    public long getTimeOfDay() {
+        return this.timeOfDay;
+    }
+
+    public Difficulty getDifficulty() {
+        return this.difficulty;
+    }
+
+    public GameRuleStore getGameRules() {
+        return this.gameRules;
+    }
+
+    public int getSunnyTime() {
+        return this.sunnyTime;
+    }
+
+    public int getRainTime() {
+        return this.rainTime;
+    }
+
+    public int getThunderTime() {
+        return this.thunderTime;
+    }
+
+    public boolean isRaining() {
+        return this.raining;
+    }
+
+    public boolean isThundering() {
+        return this.thundering;
+    }
+}
+

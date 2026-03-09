@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.huntertagog.coresystem.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "LevelStorageSessionMixin",
+    "MinecraftServerAccess",
+    "TntEntityMixin"
+  ],
+  "client": [],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

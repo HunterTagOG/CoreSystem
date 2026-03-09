@@ -1,0 +1,85 @@
+plugins {
+    id 'fabric-loom' version "${loom_version}"
+    id 'maven-publish'
+}
+
+group = "dev.huntertagog"
+version = "1.0.0"
+
+base {
+    archivesName = project.archives_base_name
+}
+
+loom {
+    splitEnvironmentSourceSets()
+
+    mods {
+        "coresystem" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://maven.wispforest.io/releases/' }
+    maven { url 'https://maven.nucleoid.xyz/' }
+    maven {
+        name = 'GeckoLib'
+        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        content { includeGroup("software.bernie.geckolib") }
+    }
+    maven { url "https://cursemaven.com" }
+}
+
+// ✅ eigener Bucket nur fürs “In-JAR mergen”
+configurations {
+    embed
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // compile-time
+    implementation project(":coresystem-common")
+    implementation project(":coresystem-platform-api")
+
+    // runtime merge (nur die Projekt-JARs, nicht deren deps)
+    include(project(":coresystem-common"))
+    include(project(":coresystem-platform-api"))
+
+    // Mods bleiben Mods:
+    include(modImplementation("me.lucko:fabric-permissions-api:${project.perm_version}"))
+    include(modImplementation("io.wispforest:owo-lib:${project.owo_version}"))
+    modImplementation "software.bernie.geckolib:geckolib-fabric-${project.minecraft_version}:${geckolib_version}"
+
+    // ❌ Diese Libraries sollten nach common, sonst doppelt im Jar:
+    include("redis.clients:jedis:${project.jedis_version}")
+    include("redis.clients.authentication:redis-authx-core:${project.redis_authx_version}")
+    include "org.apache.commons:commons-pool2:${project.commons_pool2_version}"
+    include(modImplementation "org.reflections:reflections:${project.reflections_version}")
+    include(modImplementation("com.github.ben-manes.caffeine:caffeine:${project.caffeine_version}"))
+    include("com.google.guava:guava:${project.guava_version}")
+    include("org.javassist:javassist:${project.javassist_version}")
+
+    // Der Rest wie bisher
+    compileOnly "net.luckperms:api:${project.luckperms_version}"
+    modCompileOnly files("libs/sophisticatedbackpacks-1.21.1-3.23.4.3.106.jar")
+    modCompileOnly files("libs/sophisticatedcore-1.21.1-1.2.9.20.164.jar")
+    modImplementation "curse.maven:radical-cobblemon-trainers-api-1152792:${project.rct_version}"
+
+    compileOnly "org.projectlombok:lombok:${project.lombok_version}"
+    annotationProcessor "org.projectlombok:lombok:${project.lombok_version}"
+}
+
+tasks.named("remapJar") {
+    dependsOn(":coresystem-common:jar", ":coresystem-platform-api:jar")
+}
+
+tasks.named("jar") {
+    dependsOn(":coresystem-common:jar", ":coresystem-platform-api:jar")
+}

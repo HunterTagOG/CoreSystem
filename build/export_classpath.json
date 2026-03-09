@@ -1,0 +1,27 @@
+{
+  "projectPath": ":",
+  "classpaths": {
+    "test": [
+      "E:\\_Cobblecrew\\CoreSystem\\build\\classes\\java\\test",
+      "E:\\_Cobblecrew\\CoreSystem\\build\\resources\\test",
+      "E:\\_Cobblecrew\\CoreSystem\\out\\production\\CoreSystem.test",
+      "E:\\_Cobblecrew\\CoreSystem\\out\\test\\classes",
+      "E:\\_Cobblecrew\\CoreSystem\\out\\test\\resources"
+    ],
+    "client": [
+      "E:\\_Cobblecrew\\CoreSystem\\build\\classes\\java\\client",
+      "E:\\_Cobblecrew\\CoreSystem\\build\\resources\\client",
+      "E:\\_Cobblecrew\\CoreSystem\\out\\production\\CoreSystem.client",
+      "E:\\_Cobblecrew\\CoreSystem\\out\\client\\classes",
+      "E:\\_Cobblecrew\\CoreSystem\\out\\client\\resources"
+    ],
+    "main": [
+      "E:\\_Cobblecrew\\CoreSystem\\build\\classes\\java\\main",
+      "E:\\_Cobblecrew\\CoreSystem\\build\\resources\\main",
+      "E:\\_Cobblecrew\\CoreSystem\\build\\devlibs\\CoreSystem-1.0.0-dev.jar",
+      "E:\\_Cobblecrew\\CoreSystem\\out\\production\\CoreSystem.main",
+      "E:\\_Cobblecrew\\CoreSystem\\out\\production\\classes",
+      "E:\\_Cobblecrew\\CoreSystem\\out\\production\\resources"
+    ]
+  }
+}

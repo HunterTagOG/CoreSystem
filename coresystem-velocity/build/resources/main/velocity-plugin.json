@@ -1,0 +1,11 @@
+{
+  "id": "coresystem-velocity",
+  "name": "CoreSystem Velocity",
+  "version": "1.0.0",
+  "description": "CoreSystem Velocity Bridge / Commands",
+  "authors": [
+    "HunterTagOG"
+  ],
+  "main": "dev.huntertagog.coresystem.velocity.CoreSystemVelocity",
+  "dependencies": []
+}

@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version "${shadow_version}"
+}
+
+base {
+    archivesName = "${archives_base_name}-velocity"
+}
+
+dependencies {
+    implementation project(':coresystem-common')
+    implementation project(':coresystem-platform-api')
+
+    // Velocity API nicht bundlen
+    compileOnly "com.velocitypowered:velocity-api:${velocity_api_version}"
+
+    // Optional runtime logging (Velocity hat eigenes Logging, für lokale Runs ok)
+    runtimeOnly "ch.qos.logback:logback-classic:${logback_version}"
+}
+
+tasks.named('shadowJar') {
+    archiveClassifier = '' // final jar ohne "-all"
+    dependencies {
+        exclude(dependency("com.velocitypowered:velocity-api:.*"))
+    }
+}
+
+tasks.named('jar') {
+    archiveClassifier = 'dev'
+}
+
+tasks.named('assemble') {
+    dependsOn tasks.named('shadowJar')
+}
